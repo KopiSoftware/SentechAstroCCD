@@ -1,0 +1,39 @@
+				if(long_exposure_time == 0)//input your exposure
+				{
+					printf("Input exposure time in miliseconds: ");
+					scanf("%d", &long_exposure_time);
+					printf("\n");
+				}
+	
+				int take_times=0;//Input how many photos you want to get
+				while(take_times == 0)
+				{
+					printf("Input how many photos you want to get: ");
+					scanf("%d", &take_times);
+					printf("\n");
+				};
+
+
+				for(int cnt = 0 ; cnt<take_times ; cnt++)
+				{
+					g_bSaveFileFg = TRUE;//capture the next frame
+	
+					g_bContinuousSoftTriggerFg = FALSE;
+					#ifdef DISPLAY_CALLBACK_INFO
+						QueryPerformanceCounter(&g_timeSoftTriggerOrTransferEnd);
+					#endif
+					if(!StTrg_SoftTrigger(hCamera))
+					{
+						_tprintf(TEXT("Single Soft Trigger Failed.\n"));
+						return(-1);
+					}
+						
+					_sleep(long_exposure_time);//delay that long time to exposure
+	
+					if(!StTrg_SoftSubTrigger(hCamera))
+					{
+						_tprintf(TEXT("Soft Sub Trigger Failed.\n"));
+						return(-1);
+					}
+				}
+				break;
